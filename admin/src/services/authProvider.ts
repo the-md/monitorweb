@@ -1,8 +1,6 @@
 import { AuthProvider } from 'react-admin';
 import axios from 'axios';
-import {API_URL} from "./http";
-//const API_URL = process.env.REACT_APP_API_URL || `http://localhost:5000/api`;
-
+import {API_URL} from "../http";
 
 export const authProvider: AuthProvider = {
     login: ({ username, password }) => {

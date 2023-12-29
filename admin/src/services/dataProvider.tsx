@@ -1,6 +1,5 @@
-import {API_URL} from "./http";
+import {API_URL} from "../http";
 import axios from 'axios';
-
 import { DataProvider } from 'react-admin';
 
 const dataProvider: DataProvider = {

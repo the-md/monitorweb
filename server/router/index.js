@@ -1,9 +1,14 @@
+import raExpressMongoose from "express-mongoose-ra-json-server";
 const Router = require('express').Router;
 const userController = require('../controllers/user-controller');
 const siteController = require('../controllers/site-controller');
 const router = new Router();
 const {body} = require('express-validator');
 const authMiddleware = require('../middlewares/auth-middleware');
+const SiteModel = require('../models/site-model');
+
+
+router.use("/site", raExpressMongoose(SiteModel));
 
 router.post('/registration',
     body('email').isEmail(),

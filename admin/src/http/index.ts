@@ -4,6 +4,7 @@ import {AuthResponse} from "../models/response/AuthResponse";
 //import {IUser} from "../models/IUser";
 
 export const API_URL = `http://localhost:5000/api`
+//const API_URL = process.env.REACT_APP_API_URL || `http://localhost:5000/api`;
 
 const $api = axios.create({
     withCredentials: true,
