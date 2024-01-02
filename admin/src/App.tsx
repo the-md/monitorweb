@@ -1,10 +1,14 @@
-import { Admin, Resource, ShowGuesser } from 'react-admin';
-import dataProvider from './services/dataProvider';
+import { Admin, Resource } from 'react-admin';
+//import dataProvider from './services/dataProvider';
 import SiteIcon from '@mui/icons-material/Book';
 import { SiteList, SiteEdit, SiteCreate } from './views/sites';
 import { Dashboard } from './components/Dashboard';
 import { authProvider } from './services/authProvider';
 import { Layout, Login } from './layout';
+
+import jsonServerProvider from 'ra-data-json-server';
+
+const dataProvider = jsonServerProvider('http://localhost:5000/api');
 
 const App = () => (
     <Admin
@@ -15,7 +19,7 @@ const App = () => (
         loginPage={Login}
     >
         <Resource
-            name="sites"
+            name="site"
             list={SiteList}
             edit={SiteEdit}
             create={SiteCreate}
