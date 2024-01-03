@@ -14,49 +14,46 @@ const postFilters = [
     <TextInput source="q" label="Search" alwaysOn />,
 ];
 
-export const SiteList = () => {
+export const NotificationList = () => {
     const currentUserId = localStorage.getItem('userId');
 
     return (
         <List filters={postFilters} filter={{ userId: currentUserId }}>
             <Datagrid>
-                <TextField source="url" />
-                <TextField source="name" />
-                <TextField source="interval" />
+                <TextField source="type" />
+                <TextField source="address" />
                 <EditButton />
             </Datagrid>
         </List>
     );
 };
 
-const SiteTitle = () => {
+const NotificationTitle = () => {
     const record = useRecordContext();
-    return <span>Site {record ? `"${record.title}"` : ''}</span>;
+    return <span>Notification {record ? `"${record.title}"` : ''}</span>;
 };
 
-export const SiteEdit = () => (
-    <Edit title={<SiteTitle />}>
+export const NotificationEdit = () => (
+    <Edit title={<NotificationTitle />}>
         <SimpleForm>
-            <TextInput source="url" />
-            <TextInput source="name" />
-            <TextInput source="interval" />
+            <TextInput source="type" />
+            <TextInput source="address" />
         </SimpleForm>
     </Edit>
 );
 
-export const SiteCreate = () => {
+export const NotificationCreate = () => {
     const userId = localStorage.getItem('userId');
     const transform = (data:any) => ({
         ...data,
-        userId, // Добавляем userId к данным
+        userId,
     });
 
     return (
         <Create redirect="list" transform={transform}>
             <SimpleForm>
-                <TextInput source="url" />
-                <TextInput source="name" />
-                <TextInput source="interval" />
+                <TextInput source="type" />
+                <TextInput source="address" />
             </SimpleForm>
         </Create>
     );

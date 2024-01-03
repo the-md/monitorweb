@@ -3,7 +3,6 @@ const cron = require('node-cron');
 const SiteModel = require('../models/site-model');
 const SiteLogModel = require('../models/sitelog-model');
 
-// Функция для проверки доступности сайта
 async function checkSiteAvailability(site) {
     try {
         const response = await axios.get(site.url);
@@ -33,7 +32,7 @@ async function checkSitesByInterval() {
 
         if (currentTime >= nextCheckTime) {
             await checkSiteAvailability(site);
-            const res = await SiteModel.updateOne({ _id: site._id }, { lastChecked: currentTime });
+            await SiteModel.updateOne({ _id: site._id }, { lastChecked: currentTime });
         }
     }
 }

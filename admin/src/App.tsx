@@ -1,6 +1,7 @@
 import { Admin, Resource } from 'react-admin';
 import SiteIcon from '@mui/icons-material/Book';
 import { SiteList, SiteEdit, SiteCreate } from './views/sites';
+import { NotificationList, NotificationEdit, NotificationCreate } from './views/notifications';
 import { Dashboard } from './components/Dashboard';
 import { authProvider } from './services/authProvider';
 import { Layout, Login } from './layout';
@@ -21,6 +22,13 @@ const App = () => (
             list={SiteList}
             edit={SiteEdit}
             create={SiteCreate}
+            icon={SiteIcon}
+        />
+        <Resource
+            name="notification"
+            list={NotificationList}
+            edit={NotificationEdit}
+            create={NotificationCreate}
             icon={SiteIcon}
         />
     </Admin>

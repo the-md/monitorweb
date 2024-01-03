@@ -11,7 +11,7 @@ class UserService {
     async registration(email, password) {
         const candidate = await UserModel.findOne({email})
         if (candidate) {
-            throw ApiError.BadRequest(`Пользователь с почтовым адресом ${email} уже существует`)
+            throw ApiError.BadRequest(`User with this email ${email} already exist`)
         }
         const hashPassword = await bcrypt.hash(password, 3);
         const activationLink = uuid.v4(); // v34fa-asfasf-142saf-sa-asf
@@ -19,14 +19,14 @@ class UserService {
         const user = await UserModel.create({email, password: hashPassword, activationLink})
         await mailService.sendActivationMail(email, `${process.env.API_URL}/api/activate/${activationLink}`);
 
-        const userDto = new UserDto(user); // id, email, isActivated
+        const userDto = new UserDto(user);
         const tokens = tokenService.generateTokens({...userDto});
         await tokenService.saveToken(userDto.id, tokens.refreshToken);
 
         await NotificationModel.create({
             type: 'email',
             value: email,
-            userid: user._id
+            userId: user._id
         });
 
         return {...tokens, user: userDto}
@@ -35,7 +35,7 @@ class UserService {
     async activate(activationLink) {
         const user = await UserModel.findOne({activationLink})
         if (!user) {
-            throw ApiError.BadRequest('Неккоректная ссылка активации')
+            throw ApiError.BadRequest('Wrong activation link')
         }
         user.isActivated = true;
         await user.save();
@@ -44,11 +44,11 @@ class UserService {
     async login(email, password) {
         const user = await UserModel.findOne({email})
         if (!user) {
-            throw ApiError.BadRequest('Пользователь с таким email не найден')
+            throw ApiError.BadRequest('User not found')
         }
         const isPassEquals = await bcrypt.compare(password, user.password);
         if (!isPassEquals) {
-            throw ApiError.BadRequest('Неверный пароль');
+            throw ApiError.BadRequest('Wrong password');
         }
         const userDto = new UserDto(user);
         const tokens = tokenService.generateTokens({...userDto});
