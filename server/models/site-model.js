@@ -5,7 +5,8 @@ const SiteSchema = new Schema({
     url: {type: String, required: true},
     name: {type: String},
     interval: {type: Number, required: true},
-    userid: {type: Schema.Types.ObjectId, ref: 'User'}
+    userId: {type: Schema.Types.ObjectId, ref: 'User'},
+    lastChecked: {type: Date, default: Date.now}
 })
 
 module.exports = model('Site', SiteSchema);

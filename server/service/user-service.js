@@ -5,6 +5,7 @@ const mailService = require('./mail-service');
 const tokenService = require('./token-service');
 const UserDto = require('../dtos/user-dto');
 const ApiError = require('../exceptions/api-error');
+const NotificationModel = require('../models/notification-model');
 
 class UserService {
     async registration(email, password) {
@@ -21,6 +22,12 @@ class UserService {
         const userDto = new UserDto(user); // id, email, isActivated
         const tokens = tokenService.generateTokens({...userDto});
         await tokenService.saveToken(userDto.id, tokens.refreshToken);
+
+        await NotificationModel.create({
+            type: 'email',
+            value: email,
+            userid: user._id
+        });
 
         return {...tokens, user: userDto}
     }

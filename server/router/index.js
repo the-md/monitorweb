@@ -1,15 +1,16 @@
 const Router = require('express').Router;
 const userController = require('../controllers/user-controller');
-const siteController = require('../controllers/site-controller');
 const router = new Router();
 const {body} = require('express-validator');
 const authMiddleware = require('../middlewares/auth-middleware');
 const raExpressMongoose = require("express-mongoose-ra-json-server").default;
 
 const SiteModel = require('../models/site-model');
+const NotificationModel = require('../models/notification-model');
 
 
 router.use("/site", raExpressMongoose(SiteModel));
+router.use("/notification", raExpressMongoose(NotificationModel));
 
 router.post('/registration',
     body('email').isEmail(),
@@ -21,7 +22,5 @@ router.post('/logout', userController.logout);
 router.get('/activate/:link', userController.activate);
 router.get('/refresh', userController.refresh);
 router.get('/users', authMiddleware, userController.getUsers);
-router.post('/createSite', siteController.createSite);
-router.get('/getSites', siteController.getSites);
 
 module.exports = router
