@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer');
 
+
 class MailService {
 
     constructor() {
@@ -25,6 +26,20 @@ class MailService {
                     <div>
                         <h1>Для активации перейдите по ссылке</h1>
                         <a href="${link}">${link}</a>
+                    </div>
+                `
+        })
+    }
+    async sendNotificationMail(to, url, status) {
+        await this.transporter.sendMail({
+            from: process.env.SMTP_USER,
+            to,
+            subject: 'Статус сайта ' + url,
+            text: '',
+            html:
+                `
+                    <div>
+                        <h1>Статус сайта ${url} ${status}</h1>
                     </div>
                 `
         })

@@ -14,7 +14,7 @@ class UserService {
             throw ApiError.BadRequest(`User with this email ${email} already exist`)
         }
         const hashPassword = await bcrypt.hash(password, 3);
-        const activationLink = uuid.v4(); // v34fa-asfasf-142saf-sa-asf
+        const activationLink = uuid.v4(); // v34fa-asf1sf-142saf-sa-asf
 
         const user = await UserModel.create({email, password: hashPassword, activationLink})
         await mailService.sendActivationMail(email, `${process.env.API_URL}/api/activate/${activationLink}`);

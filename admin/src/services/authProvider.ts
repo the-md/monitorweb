@@ -23,7 +23,6 @@ export const authProvider: AuthProvider = {
         return Promise.resolve();
     },
     checkError: ({ status }) => {
-        console.log('checkError')
         if (status === 401 || status === 403) {
             localStorage.removeItem('token');
             return Promise.reject();
@@ -34,6 +33,7 @@ export const authProvider: AuthProvider = {
         try {
             const response = await axios.get(`${API_URL}/refresh`, {withCredentials: true});
             localStorage.setItem('token', response.data.accessToken);
+
             return localStorage.getItem('token') ? Promise.resolve() : Promise.reject();
         } catch (error) {
             console.log('Error in checkAuth:', error);
