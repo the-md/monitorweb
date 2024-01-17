@@ -1,65 +1,28 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { useLocation, useNavigate } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
 import {
-    Avatar,
     Button,
     Card,
     CardActions,
     CircularProgress,
 } from '@mui/material';
-import LockIcon from '@mui/icons-material/Lock';
+import Box from '@mui/material/Box';
 import {
     Form,
-    required,
     TextInput,
-    useTranslate,
-    useLogin,
-    useNotify,
 } from 'react-admin';
 
-import Box from '@mui/material/Box';
-
-const Login = () => {
+const Register = () => {
     const [loading, setLoading] = useState(false);
-    const translate = useTranslate();
-
-    const notify = useNotify();
-    const login = useLogin();
-    const location = useLocation();
     const navigate = useNavigate();
 
-    const handleCreateAccount = () => {
-        navigate('/register');
+    const handleLogin = () => {
+        navigate('/login');
     };
 
-    const handleSubmit = (auth: FormValues) => {
+    const handleSubmit = async (e:any) => {
+        e.preventDefault();
         setLoading(true);
-        login(
-            auth,
-            location.state ? (location.state as any).nextPathname : '/'
-        ).catch((error: Error) => {
-            setLoading(false);
-            notify(
-                typeof error === 'string'
-                    ? error
-                    : typeof error === 'undefined' || !error.message
-                    ? 'ra.auth.sign_in_error'
-                    : error.message,
-                {
-                    type: 'error',
-                    messageArgs: {
-                        _:
-                            typeof error === 'string'
-                                ? error
-                                : error && error.message
-                                ? error.message
-                                : undefined,
-                    },
-                }
-            );
-        });
     };
 
     return (
@@ -85,28 +48,24 @@ const Login = () => {
                             justifyContent: 'center',
                         }}
                     >
-                        <Avatar sx={{ bgcolor: 'secondary.main' }}>
-                            <LockIcon />
-                        </Avatar>
                     </Box>
                     <Box sx={{ padding: '0 1em 1em 1em' }}>
                         <Box sx={{ marginTop: '1em' }}>
                             <TextInput
                                 autoFocus
-                                source="username"
-                                label={translate('ra.auth.username')}
+                                source="email"
+                                label="Email"
+                                type="email"
                                 disabled={loading}
-                                validate={required()}
                                 fullWidth
                             />
                         </Box>
                         <Box sx={{ marginTop: '1em' }}>
                             <TextInput
                                 source="password"
-                                label={translate('ra.auth.password')}
+                                label="Password"
                                 type="password"
                                 disabled={loading}
-                                validate={required()}
                                 fullWidth
                             />
                         </Box>
@@ -122,11 +81,21 @@ const Login = () => {
                             {loading && (
                                 <CircularProgress size={25} thickness={2} />
                             )}
-                            {translate('ra.auth.sign_in')}
+                            Sign up
                         </Button>
                     </CardActions>
                 </Card>
                 <Card sx={{ minWidth: 300, marginTop: '1em' }}>
+                    <Box
+                        sx={{
+                            marginTop: '1em',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            color: theme => theme.palette.grey[500],
+                        }}
+                    >
+                        Already have an account?
+                    </Box>
                     <CardActions sx={{ padding: '1em' }}>
                         <Button
                             variant="outlined"
@@ -134,12 +103,12 @@ const Login = () => {
                             color="primary"
                             disabled={loading}
                             fullWidth
-                            onClick={handleCreateAccount}
+                            onClick={handleLogin}
                         >
                             {loading && (
                                 <CircularProgress size={25} thickness={2} />
                             )}
-                            create account
+                            Login
                         </Button>
                     </CardActions>
                 </Card>
@@ -148,14 +117,4 @@ const Login = () => {
     );
 };
 
-Login.propTypes = {
-    authProvider: PropTypes.func,
-    previousRoute: PropTypes.string,
-};
-
-export default Login;
-
-interface FormValues {
-    username?: string;
-    password?: string;
-}
+export default Register;
