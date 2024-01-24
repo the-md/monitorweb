@@ -1,0 +1,14 @@
+version: '0.1'
+services:
+  server:
+    build:
+      context: ./server
+    ports:
+      - "8080:8080"
+    restart: always
+  client:
+    build:
+      context: ./client
+    ports:
+      - "80:80"
+    restart: always
