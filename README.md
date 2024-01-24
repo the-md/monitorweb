@@ -1,3 +1,4 @@
-### monitorweb - Website monitoring service
+# monitorweb
+### Website monitoring service
 ##
 ### Version 0.1
