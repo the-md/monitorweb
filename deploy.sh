@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /path/to/your/app
+cd /var/www/monitorweb/data/www/monitorweb.pro
 
 git pull origin main
 
