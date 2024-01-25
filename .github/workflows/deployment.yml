@@ -4,9 +4,17 @@ jobs:
   init:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - name: Deploy to Production
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up SSH key
         run: |
-          ssh ${{ secrets.SSH_SERVER_IP }} "cd ${{ secrets.SSH_SERVER_PATH }} && bash -s" < deploy.sh
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+      - name: Deploy to server
+        run: |
+          echo "Starting deployment..."
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.SSH_SERVER_IP }} "cd ${{ secrets.SSH_SERVER_PATH }} && bash -s" < deploy.sh
+          echo "Deployment completed."
