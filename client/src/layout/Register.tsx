@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {
     Button,
     Card,
@@ -20,7 +20,7 @@ const Register = () => {
         navigate('/login');
     };
 
-    const handleSubmit = async (e:any) => {
+    const handleSubmit = async (e: any) => {
         e.preventDefault();
         setLoading(true);
     };
@@ -40,17 +40,19 @@ const Register = () => {
                     backgroundSize: 'cover',
                 }}
             >
-                <Card sx={{ minWidth: 300, marginTop: '6em' }}>
+                <Card sx={{minWidth: 300, marginTop: '6em'}}>
                     <Box
                         sx={{
                             margin: '1em',
                             display: 'flex',
                             justifyContent: 'center',
+                            fontSize: '1em',
                         }}
                     >
+                        Create account
                     </Box>
-                    <Box sx={{ padding: '0 1em 1em 1em' }}>
-                        <Box sx={{ marginTop: '1em' }}>
+                    <Box sx={{padding: '0 1em 1em 1em'}}>
+                        <Box sx={{marginTop: '1em'}}>
                             <TextInput
                                 autoFocus
                                 source="email"
@@ -58,19 +60,19 @@ const Register = () => {
                                 type="email"
                                 disabled={loading}
                                 fullWidth
-                            />
+                                name="email"/>
                         </Box>
-                        <Box sx={{ marginTop: '1em' }}>
+                        <Box sx={{marginTop: '1em'}}>
                             <TextInput
                                 source="password"
                                 label="Password"
                                 type="password"
                                 disabled={loading}
                                 fullWidth
-                            />
+                                name="password"/>
                         </Box>
                     </Box>
-                    <CardActions sx={{ padding: '0 1em 1em 1em' }}>
+                    <CardActions sx={{padding: '0 1em 1em 1em'}}>
                         <Button
                             variant="contained"
                             type="submit"
@@ -79,13 +81,13 @@ const Register = () => {
                             fullWidth
                         >
                             {loading && (
-                                <CircularProgress size={25} thickness={2} />
+                                <CircularProgress size={25} thickness={2}/>
                             )}
                             Sign up
                         </Button>
                     </CardActions>
                 </Card>
-                <Card sx={{ minWidth: 300, marginTop: '1em' }}>
+                <Card sx={{minWidth: 300, marginTop: '1em'}}>
                     <Box
                         sx={{
                             marginTop: '1em',
@@ -96,7 +98,7 @@ const Register = () => {
                     >
                         Already have an account?
                     </Box>
-                    <CardActions sx={{ padding: '1em' }}>
+                    <CardActions sx={{padding: '1em'}}>
                         <Button
                             variant="outlined"
                             color="primary"
@@ -104,9 +106,6 @@ const Register = () => {
                             fullWidth
                             onClick={handleLogin}
                         >
-                            {loading && (
-                                <CircularProgress size={25} thickness={2} />
-                            )}
                             Login
                         </Button>
                     </CardActions>
