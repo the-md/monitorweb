@@ -44,7 +44,7 @@ const Login = () => {
             notify(
                 typeof error === 'string'
                     ? error
-                    : typeof error === 'undefined' || !error.message
+                    : (typeof error === 'undefined' || !error.message)
                     ? 'ra.auth.sign_in_error'
                     : error.message,
                 {
@@ -53,7 +53,7 @@ const Login = () => {
                         _:
                             typeof error === 'string'
                                 ? error
-                                : error && error.message
+                                : (error && error.message)
                                 ? error.message
                                 : undefined,
                     },
@@ -61,7 +61,8 @@ const Login = () => {
             );
         });
     };
-
+//typeof error === 'string' ? error : typeof error === 'undefined' || !error.message ? 'ra.auth.sign_in_error' : error.message
+//typeof error === 'string' ? error : (typeof error === 'undefined' || !error.message) ? 'ra.auth.sign_in_error' : error.message
     return (
         <Form onSubmit={handleSubmit} noValidate>
             <Box
@@ -130,7 +131,6 @@ const Login = () => {
                     <CardActions sx={{ padding: '1em' }}>
                         <Button
                             variant="outlined"
-                            type="submit"
                             color="primary"
                             disabled={loading}
                             fullWidth

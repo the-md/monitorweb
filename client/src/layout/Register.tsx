@@ -99,7 +99,6 @@ const Register = () => {
                     <CardActions sx={{ padding: '1em' }}>
                         <Button
                             variant="outlined"
-                            type="submit"
                             color="primary"
                             disabled={loading}
                             fullWidth
