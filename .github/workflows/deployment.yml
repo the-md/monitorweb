@@ -1,20 +1,27 @@
 name: GitHub Actions Deploy
 on: [push]
 jobs:
-  init:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
       - name: Set up SSH key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_KEY }}
+
       - name: Deploy to server
         run: |
           echo "Starting deployment..."
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ${{ secrets.SSH_SERVER_IP }} "cd ${{ secrets.SSH_SERVER_PATH }} && bash -s" < deploy.sh
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_SERVER_IP }} << 'EOF'
+            cd ${{ secrets.SSH_SERVER_PATH }}
+            git pull origin main
+            cd ${{ secrets.SSH_SERVER_PATH }}/client
+            npm run build
+            pm2 stop index
+            pm2 start index
+            pm2 logs index
+          EOF
           echo "Deployment completed."
