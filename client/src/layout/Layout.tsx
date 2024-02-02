@@ -1,7 +1,8 @@
-import * as React from 'react';
-import { Layout, LayoutProps } from 'react-admin';
-import AppBar from './AppBar';
+import * as React from 'react'
+import { Layout, type LayoutProps } from 'react-admin'
+import AppBar from './AppBar'
 
-export default (props: LayoutProps) => (
-    <Layout {...props} appBar={AppBar} />
-);
+const MyLayout = (props: LayoutProps) => (
+    <Layout {...props} appBar={AppBar}/>
+)
+export default MyLayout

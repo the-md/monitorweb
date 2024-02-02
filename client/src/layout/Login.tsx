@@ -1,48 +1,48 @@
-import React, {useState} from 'react';
-import PropTypes from 'prop-types';
-import {useLocation, useNavigate} from 'react-router-dom';
+import React, { useState } from 'react'
+import PropTypes from 'prop-types'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import {
     Button,
     Card,
     CardActions,
-    CircularProgress,
-} from '@mui/material';
+    CircularProgress
+} from '@mui/material'
 import {
     Form,
     required,
     TextInput,
     useTranslate,
     useLogin,
-    useNotify,
-} from 'react-admin';
+    useNotify
+} from 'react-admin'
 
-import Box from '@mui/material/Box';
+import Box from '@mui/material/Box'
 
 const Login = () => {
-    const [loading, setLoading] = useState(false);
-    const translate = useTranslate();
+    const [loading, setLoading] = useState(false)
+    const translate = useTranslate()
 
-    const notify = useNotify();
-    const login = useLogin();
-    const location = useLocation();
-    const navigate = useNavigate();
+    const notify = useNotify()
+    const login = useLogin()
+    const location = useLocation()
+    const navigate = useNavigate()
 
     const handleCreateAccount = () => {
-        navigate('/register');
-    };
+        navigate('/register')
+    }
 
     const handleSubmit = (auth: FormValues) => {
-        setLoading(true);
+        setLoading(true)
         login(
             auth,
-            location.state ? (location.state as any).nextPathname : '/'
+            location.state != null ? (location.state).nextPathname : '/'
         ).catch((error: any) => {
-            setLoading(false);
+            setLoading(false)
             notify(
                 typeof error === 'string'
                     ? error
-                    : (typeof error === 'undefined' || !error.message)
+                    : (typeof error === 'undefined' || error.message != null)
                         ? 'ra.auth.sign_in_error'
                         : error.message,
                 {
@@ -51,16 +51,13 @@ const Login = () => {
                         _:
                             typeof error === 'string'
                                 ? error
-                                : (error && error.message)
-                                    ? error.message
-                                    : undefined,
-                    },
+                                : error?.message ?? undefined
+                    }
                 }
-            );
-        });
-    };
-//typeof error === 'string' ? error : typeof error === 'undefined' || !error.message ? 'ra.auth.sign_in_error' : error.message
-//typeof error === 'string' ? error : (typeof error === 'undefined' || !error.message) ? 'ra.auth.sign_in_error' : error.message
+            )
+        })
+    }
+
     return (
         <Form onSubmit={handleSubmit} noValidate>
             <Box
@@ -73,22 +70,22 @@ const Login = () => {
                     background:
                         'url(https://source.unsplash.com/featured/1600x900)',
                     backgroundRepeat: 'no-repeat',
-                    backgroundSize: 'cover',
+                    backgroundSize: 'cover'
                 }}
             >
-                <Card sx={{minWidth: 300, marginTop: '6em'}}>
+                <Card sx={{ minWidth: 300, marginTop: '6em' }}>
                     <Box
                         sx={{
                             margin: '1em',
                             display: 'flex',
                             justifyContent: 'center',
-                            fontSize: '1em',
+                            fontSize: '1em'
                         }}
                     >
                         Login
                     </Box>
-                    <Box sx={{padding: '0 1em 1em 1em'}}>
-                        <Box sx={{marginTop: '1em'}}>
+                    <Box sx={{ padding: '0 1em 1em 1em' }}>
+                        <Box sx={{ marginTop: '1em' }}>
                             <TextInput
                                 autoFocus
                                 source="username"
@@ -98,7 +95,7 @@ const Login = () => {
                                 fullWidth
                                 name="username"/>
                         </Box>
-                        <Box sx={{marginTop: '1em'}}>
+                        <Box sx={{ marginTop: '1em' }}>
                             <TextInput
                                 source="password"
                                 label={translate('ra.auth.password')}
@@ -109,7 +106,7 @@ const Login = () => {
                                 name="password"/>
                         </Box>
                     </Box>
-                    <CardActions sx={{padding: '0 1em 1em 1em'}}>
+                    <CardActions sx={{ padding: '0 1em 1em 1em' }}>
                         <Button
                             variant="contained"
                             type="submit"
@@ -124,8 +121,8 @@ const Login = () => {
                         </Button>
                     </CardActions>
                 </Card>
-                <Card sx={{minWidth: 300, marginTop: '1em'}}>
-                    <CardActions sx={{padding: '1em'}}>
+                <Card sx={{ minWidth: 300, marginTop: '1em' }}>
+                    <CardActions sx={{ padding: '1em' }}>
                         <Button
                             variant="outlined"
                             color="primary"
@@ -139,17 +136,17 @@ const Login = () => {
                 </Card>
             </Box>
         </Form>
-    );
-};
+    )
+}
 
 Login.propTypes = {
     authProvider: PropTypes.func,
-    previousRoute: PropTypes.string,
-};
+    previousRoute: PropTypes.string
+}
 
-export default Login;
+export default Login
 
 interface FormValues {
-    username?: string;
-    password?: string;
+    username?: string
+    password?: string
 }
