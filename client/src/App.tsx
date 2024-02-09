@@ -8,7 +8,7 @@ import { authProvider } from './services/authProvider'
 import { Layout, Login, Register } from './layout'
 import jsonServerProvider from 'ra-data-json-server'
 
-const dataProvider = jsonServerProvider('http://localhost:5000/api')
+const dataProvider = jsonServerProvider(import.meta.env.APP_API_URL)
 
 const App = () => (
     <Admin

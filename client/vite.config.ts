@@ -1,12 +1,12 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-
-const PORT: number = Number(process.env.PORT)
+import Inspect from 'vite-plugin-inspect'
 
 export default defineConfig({
-    plugins: [react()],
+    plugins: [react(), Inspect()],
+    envPrefix: 'APP_',
     server: {
-        port: PORT
+        port: 3000
     },
     build: {
         outDir: 'build'

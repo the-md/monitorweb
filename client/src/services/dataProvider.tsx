@@ -1,11 +1,10 @@
-import { API_URL } from '../http'
 import axios from 'axios'
 import { type DataProvider } from 'react-admin'
 
 const dataProvider: DataProvider = {
     getList: async (resource, params) => {
         console.log('getList')
-        const url = `${API_URL}/getSites`
+        const url = `${import.meta.env.APP_API_URL}/getSites`
         try {
             const response = await axios.get(url)
             // Проверьте, что response.data существует и является массивом
@@ -25,7 +24,7 @@ const dataProvider: DataProvider = {
     },
     create: async (resource, params) => {
         console.log('create')
-        const url = `${API_URL}/createSite`
+        const url = `${import.meta.env.APP_API_URL}/createSite`
         try {
             const response = await axios.post(url, params.data)
             if (response.data != null) {
@@ -40,41 +39,41 @@ const dataProvider: DataProvider = {
     },
     getOne: async (resource, params) => {
         console.log('getOne')
-        const response = await axios.get(`${API_URL}/${resource}/${params.id}`)
+        const response = await axios.get(`${import.meta.env.APP_API_URL}/${resource}/${params.id}`)
         return { data: response.data }
     },
     getMany: async (resource, params) => {
         console.log('getMany')
         const query = params.ids.map(id => `id=${id}`).join('&')
-        const response = await axios.get(`${API_URL}/${resource}?${query}`)
+        const response = await axios.get(`${import.meta.env.APP_API_URL}/${resource}?${query}`)
         return { data: response.data }
     },
     getManyReference: async (resource, params) => {
         console.log('getManyReference')
-        const response = await axios.get(`${API_URL}/${resource}`)
+        const response = await axios.get(`${import.meta.env.APP_API_URL}/${resource}`)
         return { data: response.data, total: response.data.length }
     },
     update: async (resource: string, params: { id: number, data: any }) => {
         console.log('update')
-        const response = await axios.put(`${API_URL}/${resource}/${params.id}`, params.data)
+        const response = await axios.put(`${import.meta.env.APP_API_URL}/${resource}/${params.id}`, params.data)
         return { data: response.data }
     },
     updateMany: async (resource, params) => {
         console.log('updateMany')
         const promises = params.ids.map(async id =>
-            await axios.put(`${API_URL}/${resource}/${id}`, params.data)
+            await axios.put(`${import.meta.env.APP_API_URL}/${resource}/${id}`, params.data)
         )
         await Promise.all(promises)
         return { data: params.ids }
     },
     delete: async (resource, params) => {
         console.log('delete')
-        const response = await axios.delete(`${API_URL}/${resource}/${params.id}`)
+        const response = await axios.delete(`${import.meta.env.APP_API_URL}/${resource}/${params.id}`)
         return { data: response.data } // предполагая, что response.data содержит полную запись
     },
     deleteMany: async (resource, params) => {
         console.log('deleteMany')
-        const promises = params.ids.map(async id => await axios.delete(`${API_URL}/${resource}/${id}`))
+        const promises = params.ids.map(async id => await axios.delete(`${import.meta.env.APP_API_URL}/${resource}/${id}`))
         await Promise.all(promises)
         return { data: params.ids }
     }

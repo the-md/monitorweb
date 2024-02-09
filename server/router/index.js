@@ -9,8 +9,8 @@ const SiteModel = require('../models/site-model');
 const NotificationModel = require('../models/notification-model');
 
 
-router.use("/site", raExpressMongoose(SiteModel));
-router.use("/notification", raExpressMongoose(NotificationModel));
+router.use("/site", authMiddleware, raExpressMongoose(SiteModel));
+router.use("/notification", authMiddleware, raExpressMongoose(NotificationModel));
 
 router.post('/registration',
     body('email').isEmail(),
