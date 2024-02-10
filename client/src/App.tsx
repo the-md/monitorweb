@@ -7,8 +7,10 @@ import { Dashboard } from './components/Dashboard'
 import { authProvider } from './services/authProvider'
 import { Layout, Login, Register } from './layout'
 import jsonServerProvider from 'ra-data-json-server'
+import { httpClient } from './services/httpClient'
 
-const dataProvider = jsonServerProvider(import.meta.env.APP_API_URL)
+const apiUrl = import.meta.env.APP_API_URL
+const dataProvider = jsonServerProvider(apiUrl, httpClient)
 
 const App = () => (
     <Admin
