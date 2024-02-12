@@ -1,9 +1,11 @@
 import { type AuthProvider } from 'react-admin'
 import axios from 'axios'
 
+axios.defaults.baseURL = import.meta.env.APP_API_URL
+
 export const authProvider: AuthProvider = {
     login: async ({ username, password }) => {
-        await axios.post(`${import.meta.env.APP_API_URL}/login`, {
+        await axios.post('/login', {
             email: username,
             password
         }, {
@@ -30,13 +32,11 @@ export const authProvider: AuthProvider = {
         await Promise.resolve()
     },
     checkAuth: async (params: any) => {
-        try {
-            const response = await axios.get(`${import.meta.env.APP_API_URL}/refresh`, { withCredentials: true })
-            localStorage.setItem('token', response.data.accessToken)
-
-            localStorage.getItem('token') !== null ? await Promise.resolve() : await Promise.reject(new Error('Error in checkAuth #1'))
-        } catch (error) {
-            await Promise.reject(new Error('Error in checkAuth #2'))
+        const token = localStorage.getItem('token')
+        if (token != null) {
+            await Promise.resolve()
+        } else {
+            await Promise.reject(new Error('No token in localStorage'))
         }
     },
     getPermissions: async () => {
