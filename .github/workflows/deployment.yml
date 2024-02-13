@@ -39,7 +39,8 @@ jobs:
           echo "Starting deployment..."
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_SERVER_IP }} << 'EOF'
             cd ${{ secrets.SSH_SERVER_PATH }}
-            git pull origin main
+            git fetch origin
+            git reset --hard origin/main
             cd ${{ secrets.SSH_SERVER_PATH }}/client
             npm run build:vite
             pm2 stop index
