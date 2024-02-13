@@ -9,6 +9,9 @@ export default defineConfig({
         port: 3000
     },
     build: {
-        outDir: 'build'
+        outDir: 'build',
+        rollupOptions: {
+            external: ['jwt-decode']
+        }
     }
 })
