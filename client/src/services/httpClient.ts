@@ -7,7 +7,7 @@ async function refreshAuthToken () {
     try {
         const response = await axios.get('/refresh', { withCredentials: true })
         const { accessToken } = response.data
-        localStorage.setItem('authToken', accessToken)
+        localStorage.setItem('token', accessToken)
         return accessToken
     } catch (error) {
         throw new Error('Failed to update authentication token')
