@@ -31,12 +31,12 @@ export const authProvider: AuthProvider = {
         }
         await Promise.resolve()
     },
-    checkAuth: async (params: any) => {
+    checkAuth: async () => {
         const token = localStorage.getItem('token')
         if (token != null) {
             await Promise.resolve()
         } else {
-            await Promise.reject(new Error('No token in localStorage'))
+            await Promise.reject(new Error('User not authenticated'))
         }
     },
     getPermissions: async () => {

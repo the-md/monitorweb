@@ -34,6 +34,6 @@ export const httpClient = async (url: string, options: fetchUtils.Options = {}) 
     } else {
         throw new Error('Token is null')
     }
-
+    options.headers = customHeaders
     return await fetchUtils.fetchJson(url, options)
 }
