@@ -1,6 +1,5 @@
 import { fetchUtils } from 'react-admin'
 import { jwtDecode, type JwtPayload } from 'jwt-decode'
-import type { CustomFetchOptions } from '../types'
 import axios from 'axios'
 
 async function refreshAuthToken () {
@@ -20,27 +19,21 @@ function isTokenExpired (token: string): boolean {
     return (decodedToken.exp ?? 0) < currentTime
 }
 
-export const httpClient = async (url: string, options: CustomFetchOptions = {}) => {
-    if (options.headers == null) {
-        options.headers = new Headers({ Accept: 'application/json' })
-    } else if (!(options.headers instanceof Headers)) {
-        options.headers = new Headers(options.headers)
-    }
+export const httpClient = async (url: string, options: fetchUtils.Options = {}) => {
+    const customHeaders = ((options.headers != null) ||
+        new Headers({
+            Accept: 'application/json'
+        })) as Headers
+
     let token = localStorage.getItem('token')
     if (token != null && isTokenExpired(token)) {
         token = await refreshAuthToken()
     }
-
     if (token != null) {
-        options.headers.set('Authorization', `Bearer ${token}`)
+        customHeaders.set('Authorization', `Bearer ${token}`)
     } else {
         throw new Error('Token is null')
     }
 
-    try {
-        const response: { status: number, headers: Headers, body: string, json: any } = await fetchUtils.fetchJson(url, options)
-        return response
-    } catch (error) {
-        return await Promise.reject(error)
-    }
+    return await fetchUtils.fetchJson(url, options)
 }
