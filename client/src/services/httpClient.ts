@@ -2,6 +2,8 @@ import { fetchUtils } from 'react-admin'
 import { jwtDecode, type JwtPayload } from 'jwt-decode'
 import axios from 'axios'
 
+axios.defaults.baseURL = import.meta.env.APP_API_URL
+
 async function refreshAuthToken () {
     try {
         const response = await axios.get('/refresh', { withCredentials: true })

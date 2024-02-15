@@ -4,9 +4,9 @@ import axios from 'axios'
 axios.defaults.baseURL = import.meta.env.APP_API_URL
 
 export const authProvider: AuthProvider = {
-    login: async ({ username, password }) => {
+    login: async ({ email, password }) => {
         await axios.post('/login', {
-            email: username,
+            email,
             password
         }, {
             withCredentials: true

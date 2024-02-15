@@ -16,7 +16,7 @@ import {
     useLogin,
     useNotify
 } from 'react-admin'
-
+import { type FormValues } from '../types'
 import Box from '@mui/material/Box'
 
 const Login = () => {
@@ -88,12 +88,12 @@ const Login = () => {
                         <Box sx={{ marginTop: '1em' }}>
                             <TextInput
                                 autoFocus
-                                source="username"
-                                label={translate('ra.auth.username')}
+                                source="email"
+                                label="Email"
                                 disabled={loading}
                                 validate={required()}
                                 fullWidth
-                                name="username"/>
+                                name="email"/>
                         </Box>
                         <Box sx={{ marginTop: '1em' }}>
                             <TextInput
@@ -145,8 +145,3 @@ Login.propTypes = {
 }
 
 export default Login
-
-interface FormValues {
-    username?: string
-    password?: string
-}

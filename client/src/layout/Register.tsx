@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import {
+    useLocation,
+    useNavigate
+} from 'react-router-dom'
 import {
     Button,
     Card,
@@ -9,20 +12,51 @@ import {
 import Box from '@mui/material/Box'
 import {
     Form,
-    TextInput
+    TextInput,
+    useLogin,
+    useNotify
 } from 'react-admin'
+import { registration } from '../services/registration'
+import { type FormValues } from '../types'
 
 const Register = () => {
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
+    const notify = useNotify()
+    const login = useLogin()
+    const location = useLocation()
 
     const handleLogin = () => {
         navigate('/login')
     }
 
-    const handleSubmit = async (e: any) => {
-        e.preventDefault()
+    const handleSubmit = async (auth: FormValues) => {
         setLoading(true)
+        await registration(auth)
+        await login(
+            auth,
+            location.state != null ? (location.state).nextPathname : '/'
+        ).catch((error: any) => {
+            setLoading(false)
+            notify(
+                typeof error === 'string'
+                    ? error
+                    : (typeof error === 'undefined' || error.message != null)
+                        ? 'ra.auth.sign_in_error'
+                        : error.message,
+                {
+                    type: 'error',
+                    messageArgs: {
+                        _:
+                            typeof error === 'string'
+                                ? error
+                                : error?.message ?? undefined
+                    }
+                }
+            )
+        })
+        setLoading(false)
+        notify('You have successfully registered', { type: 'success' })
     }
 
     return (
