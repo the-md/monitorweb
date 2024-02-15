@@ -11,7 +11,13 @@ export default defineConfig({
     build: {
         outDir: 'build',
         rollupOptions: {
-            external: ['jwt-decode']
+            external: ['jwt-decode'],
+            output: {
+                manualChunks (id) {
+                    if (id.includes('node_modules/react-admin')) return 'react-admin'
+                    if (id.includes('node_modules/ra-data-json-server')) return 'ra-data-json-server'
+                }
+            }
         }
     }
 })
