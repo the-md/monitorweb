@@ -18,6 +18,9 @@ app.use(cors({
     origin: process.env.CLIENT_URL,
     exposedHeaders: ['X-Total-Count']
 }));
+
+app.options('*', cors());
+
 app.use('/api', router);
 app.use(errorMiddleware);
 
