@@ -11,7 +11,6 @@ export default defineConfig({
     build: {
         outDir: 'build',
         rollupOptions: {
-            external: ['jwt-decode'],
             output: {
                 manualChunks (id) {
                     if (id.includes('node_modules/react-admin')) return 'react-admin'
