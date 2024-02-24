@@ -21,6 +21,7 @@ import Box from '@mui/material/Box'
 
 const Login = () => {
     const [loading, setLoading] = useState(false)
+    const [form, setForm] = useState({ email: null, password: null })
     const translate = useTranslate()
 
     const notify = useNotify()
@@ -30,6 +31,11 @@ const Login = () => {
 
     const handleCreateAccount = () => {
         navigate('/register')
+    }
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target
+        setForm(prev => ({ ...prev, [name]: value }))
     }
 
     const handleSubmit = (auth: FormValues) => {
@@ -58,8 +64,25 @@ const Login = () => {
         })
     }
 
+    const validateUserLogin = (values: FormValues) => {
+        const errors: any = {}
+        const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+        if (values.email === null || values.email === undefined) {
+            errors.email = 'ra.validation.required'
+        } else if (values.email !== undefined && !regexEmail.test(values.email)) {
+            errors.email = 'ra.validation.email'
+        }
+        if (values.password === null || values.password === undefined) {
+            errors.password = 'ra.validation.required'
+        }
+        return errors
+    }
+
     return (
-        <Form onSubmit={handleSubmit} noValidate>
+        <Form onSubmit={() => {
+            handleSubmit(form)
+        }} validate={validateUserLogin} noValidate>
             <Box
                 sx={{
                     display: 'flex',
@@ -90,10 +113,14 @@ const Login = () => {
                                 autoFocus
                                 source="email"
                                 label="Email"
+                                type="email"
                                 disabled={loading}
                                 validate={required()}
                                 fullWidth
-                                name="email"/>
+                                name="email"
+                                value={form.email}
+                                onChange={handleChange}
+                            />
                         </Box>
                         <Box sx={{ marginTop: '1em' }}>
                             <TextInput
@@ -103,7 +130,10 @@ const Login = () => {
                                 disabled={loading}
                                 validate={required()}
                                 fullWidth
-                                name="password"/>
+                                name="password"
+                                value={form.password}
+                                onChange={handleChange}
+                            />
                         </Box>
                     </Box>
                     <CardActions sx={{ padding: '0 1em 1em 1em' }}>

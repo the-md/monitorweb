@@ -3,6 +3,6 @@ export interface CustomFetchOptions extends RequestInit {
 }
 
 export interface FormValues {
-    email?: string
-    password?: string
+    email?: string | null
+    password?: string | null
 }
