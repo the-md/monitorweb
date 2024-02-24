@@ -11,7 +11,7 @@ import {
 } from '@mui/material'
 import Box from '@mui/material/Box'
 import {
-    Form,
+    Form, required,
     TextInput,
     useLogin,
     useNotify
@@ -21,46 +21,75 @@ import { type FormValues } from '../types'
 
 const Register = () => {
     const [loading, setLoading] = useState(false)
-    const navigate = useNavigate()
+    const [form, setForm] = useState({ email: null, password: null })
+
     const notify = useNotify()
     const login = useLogin()
     const location = useLocation()
+    const navigate = useNavigate()
 
-    const handleLogin = () => {
+    const handleRouteLogin = () => {
         navigate('/login')
     }
 
-    const handleSubmit = async (auth: FormValues) => {
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target
+        setForm(prev => ({ ...prev, [name]: value }))
+    }
+
+    const handleSubmit = (auth: FormValues) => {
         setLoading(true)
-        await registration(auth)
-        await login(
-            auth,
-            location.state != null ? (location.state).nextPathname : '/'
-        ).catch((error: any) => {
-            setLoading(false)
-            notify(
-                typeof error === 'string'
-                    ? error
-                    : (typeof error === 'undefined' || error.message != null)
-                        ? 'ra.auth.sign_in_error'
-                        : error.message,
-                {
-                    type: 'error',
-                    messageArgs: {
-                        _:
-                            typeof error === 'string'
-                                ? error
-                                : error?.message ?? undefined
+        registration(auth)
+            .then(async () => {
+                return await login(
+                    auth,
+                    location.state != null ? (location.state).nextPathname : '/'
+                )
+            })
+            .then(() => {
+                setLoading(false)
+                notify('You have successfully registered', { type: 'success' })
+            })
+            .catch((error: any) => {
+                setLoading(false)
+                notify(
+                    typeof error === 'string'
+                        ? error
+                        : (typeof error === 'undefined' || error.message != null)
+                            ? 'ra.auth.sign_in_error'
+                            : error.message,
+                    {
+                        type: 'error',
+                        messageArgs: {
+                            _:
+                                typeof error === 'string'
+                                    ? error
+                                    : error?.message ?? undefined
+                        }
                     }
-                }
-            )
-        })
-        setLoading(false)
-        notify('You have successfully registered', { type: 'success' })
+                )
+            })
+    }
+
+    const validateUserLogin = (values: FormValues) => {
+        const errors: any = {}
+        const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+        if (values.email === null || values.email === undefined) {
+            errors.email = 'ra.validation.required'
+        } else if (values.email !== undefined && !regexEmail.test(values.email)) {
+            errors.email = 'ra.validation.email'
+        }
+        if (values.password === null || values.password === undefined) {
+            errors.password = 'ra.validation.required'
+        }
+        return errors
     }
 
     return (
-        <Form onSubmit={handleSubmit} noValidate>
+        <Form onSubmit={() => {
+            handleSubmit(form)
+        }} validate={validateUserLogin} noValidate>
             <Box
                 sx={{
                     display: 'flex',
@@ -93,8 +122,12 @@ const Register = () => {
                                 label="Email"
                                 type="email"
                                 disabled={loading}
+                                validate={required()}
                                 fullWidth
-                                name="email"/>
+                                name="email"
+                                value={form.email}
+                                onChange={handleChange}
+                            />
                         </Box>
                         <Box sx={{ marginTop: '1em' }}>
                             <TextInput
@@ -102,8 +135,12 @@ const Register = () => {
                                 label="Password"
                                 type="password"
                                 disabled={loading}
+                                validate={required()}
                                 fullWidth
-                                name="password"/>
+                                name="password"
+                                value={form.password}
+                                onChange={handleChange}
+                            />
                         </Box>
                     </Box>
                     <CardActions sx={{ padding: '0 1em 1em 1em' }}>
@@ -138,7 +175,7 @@ const Register = () => {
                             color="primary"
                             disabled={loading}
                             fullWidth
-                            onClick={handleLogin}
+                            onClick={handleRouteLogin}
                         >
                             Login
                         </Button>

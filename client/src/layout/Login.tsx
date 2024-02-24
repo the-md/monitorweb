@@ -29,7 +29,7 @@ const Login = () => {
     const location = useLocation()
     const navigate = useNavigate()
 
-    const handleCreateAccount = () => {
+    const handleRouteCreateAccount = () => {
         navigate('/register')
     }
 
@@ -158,7 +158,7 @@ const Login = () => {
                             color="primary"
                             disabled={loading}
                             fullWidth
-                            onClick={handleCreateAccount}
+                            onClick={handleRouteCreateAccount}
                         >
                             create account
                         </Button>
