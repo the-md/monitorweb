@@ -1,8 +1,5 @@
 import React, { useState } from 'react'
-import {
-    useLocation,
-    useNavigate
-} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import {
     Button,
     Card,
@@ -11,7 +8,10 @@ import {
 } from '@mui/material'
 import Box from '@mui/material/Box'
 import {
-    Form, required,
+    required,
+    email,
+    minLength,
+    Form,
     TextInput,
     useLogin,
     useNotify
@@ -25,8 +25,10 @@ const Register = () => {
 
     const notify = useNotify()
     const login = useLogin()
-    const location = useLocation()
     const navigate = useNavigate()
+
+    const validatePassword = [required(), minLength(6)]
+    const validateEmail = [required(), email()]
 
     const handleRouteLogin = () => {
         navigate('/login')
@@ -41,14 +43,12 @@ const Register = () => {
         setLoading(true)
         registration(auth)
             .then(async () => {
-                return await login(
-                    auth,
-                    location.state != null ? (location.state).nextPathname : '/'
-                )
+                return await login(auth)
             })
             .then(() => {
                 setLoading(false)
                 notify('You have successfully registered', { type: 'success' })
+                navigate('/')
             })
             .catch((error: any) => {
                 setLoading(false)
@@ -71,25 +71,10 @@ const Register = () => {
             })
     }
 
-    const validateUserLogin = (values: FormValues) => {
-        const errors: any = {}
-        const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-
-        if (values.email === null || values.email === undefined) {
-            errors.email = 'ra.validation.required'
-        } else if (values.email !== undefined && !regexEmail.test(values.email)) {
-            errors.email = 'ra.validation.email'
-        }
-        if (values.password === null || values.password === undefined) {
-            errors.password = 'ra.validation.required'
-        }
-        return errors
-    }
-
     return (
         <Form onSubmit={() => {
             handleSubmit(form)
-        }} validate={validateUserLogin} noValidate>
+        }} noValidate>
             <Box
                 sx={{
                     display: 'flex',
@@ -122,7 +107,7 @@ const Register = () => {
                                 label="Email"
                                 type="email"
                                 disabled={loading}
-                                validate={required()}
+                                validate={validateEmail}
                                 fullWidth
                                 name="email"
                                 value={form.email}
@@ -135,7 +120,7 @@ const Register = () => {
                                 label="Password"
                                 type="password"
                                 disabled={loading}
-                                validate={required()}
+                                validate={validatePassword}
                                 fullWidth
                                 name="password"
                                 value={form.password}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 import {
     Button,
@@ -9,10 +9,11 @@ import {
     CircularProgress
 } from '@mui/material'
 import {
-    Form,
     required,
+    email,
+    minLength,
+    Form,
     TextInput,
-    useTranslate,
     useLogin,
     useNotify
 } from 'react-admin'
@@ -22,12 +23,13 @@ import Box from '@mui/material/Box'
 const Login = () => {
     const [loading, setLoading] = useState(false)
     const [form, setForm] = useState({ email: null, password: null })
-    const translate = useTranslate()
 
     const notify = useNotify()
     const login = useLogin()
-    const location = useLocation()
     const navigate = useNavigate()
+
+    const validatePassword = [required(), minLength(6)]
+    const validateEmail = [required(), email()]
 
     const handleRouteCreateAccount = () => {
         navigate('/register')
@@ -40,10 +42,9 @@ const Login = () => {
 
     const handleSubmit = (auth: FormValues) => {
         setLoading(true)
-        login(
-            auth,
-            location.state != null ? (location.state).nextPathname : '/'
-        ).catch((error: any) => {
+        login(auth).then(() => {
+            navigate('/')
+        }).catch((error: any) => {
             setLoading(false)
             notify(
                 typeof error === 'string'
@@ -64,25 +65,10 @@ const Login = () => {
         })
     }
 
-    const validateUserLogin = (values: FormValues) => {
-        const errors: any = {}
-        const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-
-        if (values.email === null || values.email === undefined) {
-            errors.email = 'ra.validation.required'
-        } else if (values.email !== undefined && !regexEmail.test(values.email)) {
-            errors.email = 'ra.validation.email'
-        }
-        if (values.password === null || values.password === undefined) {
-            errors.password = 'ra.validation.required'
-        }
-        return errors
-    }
-
     return (
         <Form onSubmit={() => {
             handleSubmit(form)
-        }} validate={validateUserLogin} noValidate>
+        }} noValidate>
             <Box
                 sx={{
                     display: 'flex',
@@ -115,7 +101,7 @@ const Login = () => {
                                 label="Email"
                                 type="email"
                                 disabled={loading}
-                                validate={required()}
+                                validate={validateEmail}
                                 fullWidth
                                 name="email"
                                 value={form.email}
@@ -125,10 +111,10 @@ const Login = () => {
                         <Box sx={{ marginTop: '1em' }}>
                             <TextInput
                                 source="password"
-                                label={translate('ra.auth.password')}
+                                label="Password"
                                 type="password"
                                 disabled={loading}
-                                validate={required()}
+                                validate={validatePassword}
                                 fullWidth
                                 name="password"
                                 value={form.password}
@@ -147,7 +133,7 @@ const Login = () => {
                             {loading && (
                                 <CircularProgress size={25} thickness={2}/>
                             )}
-                            {translate('ra.auth.sign_in')}
+                            Sign in
                         </Button>
                     </CardActions>
                 </Card>
