@@ -48,7 +48,7 @@ const Register = () => {
             .then(() => {
                 setLoading(false)
                 notify('You have successfully registered', { type: 'success' })
-                navigate('/')
+                navigate('/admin')
             })
             .catch((error: any) => {
                 setLoading(false)

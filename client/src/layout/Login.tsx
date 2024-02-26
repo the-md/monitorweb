@@ -43,7 +43,7 @@ const Login = () => {
     const handleSubmit = (auth: FormValues) => {
         setLoading(true)
         login(auth).then(() => {
-            navigate('/')
+            navigate('/admin')
         }).catch((error: any) => {
             setLoading(false)
             notify(

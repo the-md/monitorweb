@@ -1,42 +1,18 @@
-import { Admin, Resource, CustomRoutes } from 'react-admin'
-import { Route } from 'react-router-dom'
-import SiteIcon from '@mui/icons-material/Book'
-import { SiteList, SiteEdit, SiteCreate } from './views/sites'
-import { NotificationList, NotificationEdit, NotificationCreate } from './views/notifications'
-import { Dashboard } from './components/Dashboard'
-import { authProvider } from './services/authProvider'
-import { Layout, Login, Register } from './layout'
-import jsonServerProvider from 'ra-data-json-server'
-import { httpClient } from './services/httpClient'
-
-const dataProvider = jsonServerProvider(import.meta.env.APP_API_URL, httpClient)
+import { Routes, Route } from 'react-router-dom'
+import AdminPage from './layout/AdminPage'
+import Home from './layout/Home'
+// import Login from './layout/Login'
+import NotFound from './layout/NotFound'
+import Register from './layout/Register'
 
 const App = () => (
-    <Admin
-        authProvider={authProvider}
-        dataProvider={dataProvider}
-        dashboard={Dashboard}
-        layout={Layout}
-        loginPage={Login}
-    >
-        <Resource
-            name="site"
-            list={SiteList}
-            edit={SiteEdit}
-            create={SiteCreate}
-            icon={SiteIcon}
-        />
-        <Resource
-            name="notification"
-            list={NotificationList}
-            edit={NotificationEdit}
-            create={NotificationCreate}
-            icon={SiteIcon}
-        />
-        <CustomRoutes noLayout>
-            <Route path="/register" element={<Register/>}/>
-        </CustomRoutes>
-    </Admin>
+    <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/register" element={<Register />}/>
+        {/* <Route path="/login" element={<Login />}/> */}
+        <Route path="/admin/*" element={<AdminPage/>}/>
+        <Route path="*" element={<NotFound />} />
+    </Routes>
 )
 
 export default App
