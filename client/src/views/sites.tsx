@@ -7,7 +7,9 @@ import {
     Create,
     SimpleForm,
     TextInput,
-    useRecordContext
+    useRecordContext,
+    SelectInput,
+    required
 } from 'react-admin'
 
 const postFilters = [
@@ -38,9 +40,14 @@ const SiteTitle = () => {
 export const SiteEdit = () => (
     <Edit title={<SiteTitle/>}>
         <SimpleForm>
-            <TextInput source="url"/>
+            <TextInput source="url" disabled/>
             <TextInput source="name"/>
-            <TextInput source="interval"/>
+            <SelectInput source="interval" validate={required()} choices={[
+                { id: '1', name: '1 minute' },
+                { id: '5', name: '5 minutes' },
+                { id: '15', name: '15 minutes' },
+                { id: '30', name: '30 minutes' }
+            ]} />
         </SimpleForm>
     </Edit>
 )
@@ -55,9 +62,14 @@ export const SiteCreate = () => {
     return (
         <Create redirect="list" transform={transform}>
             <SimpleForm>
-                <TextInput source="url"/>
+                <TextInput source="url" validate={[required()]} />
                 <TextInput source="name"/>
-                <TextInput source="interval"/>
+                <SelectInput source="interval" validate={required()} choices={[
+                    { id: '1', name: '1 minute' },
+                    { id: '5', name: '5 minutes' },
+                    { id: '15', name: '15 minutes' },
+                    { id: '30', name: '30 minutes' }
+                ]} />
             </SimpleForm>
         </Create>
     )
